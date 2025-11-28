@@ -1,0 +1,29 @@
+#gameWindow {
+    position: relative;
+    width: 1000px;
+    height: 800px;
+    background-color: gray;
+}
+
+#piece {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background-color: red;
+}
+
+#commandBox {
+    display: flex;
+}
+
+#save {
+    width: 300px;
+    height: 100px;
+    background-color: gold;
+}
+
+#clear{
+    width: 300px;
+    height: 100px;
+    background-color: silver;
+}
