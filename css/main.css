@@ -11,8 +11,8 @@
 
 .pieceGroup {
     position: absolute;
-    width: 200px;
-    height: 200px;
+    width: 20px;
+    height: 100px;
     background-color: red;
     border: 1px solid black;
 }
