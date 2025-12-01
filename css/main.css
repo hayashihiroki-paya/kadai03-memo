@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 #gameWindow {
     position: relative;
     width: 1000px;
@@ -5,11 +9,50 @@
     background-color: gray;
 }
 
-#piece {
+.pieceGroup {
     position: absolute;
     width: 200px;
     height: 200px;
     background-color: red;
+    border: 1px solid black;
+}
+
+.miniPieceGroup {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: aqua;
+    border: 1px solid black;
+}
+
+.dropZoneGroup {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 200px;
+    height: 200px;
+    background-color: greenyellow;
+    border: 1px solid black;
+}
+.dropTarget {
+    background-color: wheat;
+}
+
+.movingBoard {
+    position: absolute;
+    width: 10px;
+    height: 100px;
+    background-color: whitesmoke;
+    border: 1px solid black;
+}
+
+#leftBoard {
+    top: 50%;
+    left: 30px;
+}
+#rightBoard {
+    top: 50%;
+    right: 30px;
 }
 
 #commandBox {
@@ -22,8 +65,33 @@
     background-color: gold;
 }
 
+.saveSlot,
+.loadSlot,
+.clearSlot {
+    width: 100%;
+    height: 50%;
+    border: 1px solid black;
+}
+
+#load {
+    width: 300px;
+    height: 100px;
+    background-color: palegreen;
+}
+
 #clear{
     width: 300px;
     height: 100px;
     background-color: silver;
 }
+
+#boll {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    background-color: blue;
+}
+

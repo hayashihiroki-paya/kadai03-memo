@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>メモ帳課題</title>
+    <!--jQueryを読み込み-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--jQuery UIを読み込み-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet"
+        href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-darkness/jquery-ui.css">
     <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="./css/main.css">
 </head>
@@ -12,15 +18,41 @@
 <body>
     <div id="wappar">
         <div id="gameWindow">
-            <div id="piece"></div>
+            <div id="dropZone">
+                <div class="dropZoneGroup"></div>
+            </div>
+            <div id="piece" class="pieceGroup" draggable="false">1</div>
+            <div id="piece1" class="pieceGroup" draggable="false">2</div>
+            <div id="piece2" class="pieceGroup" draggable="false">3</div>
+            <div id="piece3" class="pieceGroup" draggable="false">4</div>
+            <div id="piece4" class="pieceGroup" draggable="false">5</div>
+            <div id="piece5" class="pieceGroup" draggable="false">6</div>
+            <div id="piece6" class="pieceGroup" draggable="false">
+                <div id="miniPiece" class="miniPieceGroup">m1</div>
+            </div>
+            <div id="boll"></div>
+            <div>
+                <div id="leftBoard" class="movingBoard"></div>
+                <div id="rightBoard" class="movingBoard"></div>
+            </div>
         </div>
     </div>
     <div id="commandBox">
-        <div id="save">保存</div>
-        <div id="clear">削除</div>
+        <div id="save">
+            <div class="saveSlot">slot1</div>
+            <div class="saveSlot">slot2</div>
+        </div>
+        <div id="load">
+            <div class="loadSlot">load1</div>
+            <div class="loadSlot">load2</div>
+        </div>
+        <div id="clear">
+            <div class="clearSlot">clear1</div>
+            <div class="clearSlot">clear2</div>
+        </div>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
     <script src="./js/main.js"></script>
 </body>
 
