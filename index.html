@@ -21,15 +21,18 @@
             <div id="dropZone">
                 <!-- <div class="dropZoneGroup"></div> -->
             </div>
-            <div id="piece" class="pieceGroup" draggable="false">1</div>
-            <div id="piece1" class="pieceGroup" draggable="false">2</div>
-            <div id="piece2" class="pieceGroup" draggable="false">3</div>
-            <div id="piece3" class="pieceGroup" draggable="false">4</div>
-            <div id="piece4" class="pieceGroup" draggable="false">5</div>
-            <div id="piece5" class="pieceGroup" draggable="false">6</div>
-            <div id="piece6" class="pieceGroup" draggable="false">
-                <!-- <div id="miniPiece" class="miniPieceGroup">m1</div> -->
+            <div id="messageWindow">
+                <div id="messageText">
+                    <p>この枠内にお邪魔ゾーンを動かしてください</p>
+                    <p>スペースキーで始まります</p>
+                </div>
             </div>
+            <div id="piece" class="pieceGroup colorRed" draggable="false">1</div>
+            <div id="piece1" class="pieceGroup colorBlue" draggable="false">2</div>
+            <div id="piece2" class="pieceGroup colorRed" draggable="false">3</div>
+            <div id="piece3" class="pieceGroup colorBlue" draggable="false">4</div>
+            <div id="piece4" class="pieceGroup colorRed" draggable="false">5</div>
+            <div id="piece5" class="pieceGroup colorBlue" draggable="false">6</div>
             <div id="boll"></div>
             <div>
                 <div id="leftBoard" class="movingBoard"></div>
@@ -49,6 +52,16 @@
         <div id="clear">
             <div class="clearSlot">clear1</div>
             <div class="clearSlot">clear2</div>
+        </div>
+        <div id="score">
+            <div class="scoreSlot">
+                <p>左プレイヤー</p>
+                <span id="scoreL"></span>
+            </div>
+            <div class="scoreSlot">
+                <p>右プレイヤー</p>
+                <span id="scoreR"></span>
+            </div>
         </div>
     </div>
 
