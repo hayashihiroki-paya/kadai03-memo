@@ -15,18 +15,17 @@ const constant = {
     deadAngle: 20,
     bollDefaultPos: $boll.offset(),
     pieceRedDefaultPos: $(".colorRed").offset(),
-    pieceBlueDefaultPos: $(".colorBlue").offset()
+    pieceBlueDefaultPos: $(".colorYellow").offset(),
+    gameSetScore: 10,
+    boardDefaultPosL: $("#leftBoard").offset(),
+    boardDefaultPosR: $("#rightBoard").offset()
 }
+// 音声設定
+const reflectionSE = new Audio('./audio/reflection.mp3');
+const missSE = new Audio('./audio/miss.mp3');
+const resultSE = new Audio('./audio/result.mp3');
 // ドラッグドロップ関係
 $(".pieceGroup").draggable({ containment: "#messageWindow" });
-$(".miniPieceGroup").draggable();
-$(".dropZoneGroup").droppable({
-    accept: ".pieceGroup",
-    hoverClass: ".dropTarget",
-    drop: function (event, ui) {
-        alert('drop検知');
-    }
-});
 // キーボードが押されているかの判定
 let keys = {};
 $(window).on('keydown', function (e) {
@@ -94,7 +93,7 @@ function resetPieceGroup() {
         $(this).css('top', redPos.top);
         $(this).css('left', redPos.left);
     })
-    $(".colorBlue").each(function (i) {
+    $(".colorYellow").each(function (i) {
         const redPos = {
             top: constant.pieceBlueDefaultPos.top + $(this).width() * i,
             left: constant.pieceBlueDefaultPos.left - $(this).width() * i
@@ -122,12 +121,22 @@ function animate(now) {
         isAnimate = false;
         scoreR++;
         $scoreR.text(`${scoreR}`);
+        if (scoreR >= constant.gameSetScore) {
+            gameFinish();
+        }else{
+            playSE(missSE);
+        }
         return;
     } else if (bollPos.left > constant.windowWidth - $boll.width()) {
         $("#messageWindow").css('display', 'block');
         isAnimate = false;
         scoreL++;
         $scoreL.text(`${scoreL}`);
+        if (scoreL >= constant.gameSetScore) {
+            gameFinish();
+        }else{
+            playSE(missSE);
+        }
         return;
     }
     // 上下壁で反射 はみ出ないように座標を強制する
@@ -135,11 +144,13 @@ function animate(now) {
         bollPos.top = 0;
         bollSpeedY *= -1;
         angle = 360 - angle;
+        playSE(reflectionSE);
         if (angle < 0) angle = 360 + angle;
     } else if (bollPos.top > constant.windowHight - $boll.height()) {
         bollPos.top = constant.windowHight - $boll.height();
         bollSpeedY *= -1;
         angle = 360 - angle;
+        playSE(reflectionSE);
         if (angle < 0) angle = 360 + angle;
     }
     // 左右のバーの動作 速度を変更する
@@ -166,6 +177,7 @@ function animate(now) {
         bollPos.left = posLeft.left + boardSize.width;
         bollSpeedX *= -1;
         angle = 180 - angle;
+        playSE(reflectionSE);
         if (angle < 0) angle = 360 + angle;
     }
     if (posRight.left < bollPos.left + bollSize.width &&
@@ -176,6 +188,7 @@ function animate(now) {
         bollPos.left = posRight.left - bollSize.width;
         bollSpeedX *= -1;
         angle = 180 - angle;
+        playSE(reflectionSE);
         if (angle < 0) angle = 360 + angle;
     }
     // お邪魔ブロックとの当たり判定
@@ -196,7 +209,7 @@ function animate(now) {
             // 接触している場合の処理
             flags[i] = true;
             angle += Math.floor(Math.random() * constant.randomAngle - constant.randomAngle / 2);
-            // 角度が立てすぎるとき修正
+            // 角度が縦すぎるとき修正 90,270は垂直移動してる時の角度
             if (angle > 270 - constant.deadAngle && angle <= 270) angle = 270 - constant.deadAngle;
             if (angle >= 270 && angle < 270 + constant.deadAngle) angle = 270 + constant.deadAngle;
             if (angle > 90 - constant.deadAngle && angle <= 90) angle = 90 - constant.deadAngle;
@@ -232,20 +245,60 @@ if (isAnimate) {
 }
 // スペースキー押されたときゲームスタート
 $(window).on('keyup', function (e) {
+    // 10点あったら終了
+    if (scoreL >= constant.gameSetScore || scoreR >= constant.gameSetScore) {
+        location.reload();
+    }
     if (e.key === " " && !isAnimate) {
         $("#messageWindow").css('display', 'none');
         $boll.offset(constant.bollDefaultPos);
         bollPos.left = constant.bollDefaultPos.left;
         bollPos.top = constant.bollDefaultPos.top;
+        $left.offset(constant.boardDefaultPosL);
+        posLeft = $left.offset();
+        $right.offset(constant.boardDefaultPosR);
+        posRight = $right.offset()
         isAnimate = true;
         lastTime = performance.now();
         requestAnimationFrame(animate);
     }
 })
+// 対戦履歴を自動読み込み
+let resultTextLog = [];
+if (localStorage.getItem('resultText')) {
+    const json = localStorage.getItem('resultText');
+    const text = JSON.parse(json);
+    for (let i = 0; i < text.length; i++) {
+        console.log("text[i]", text[i]);
+        resultTextLog.push(text[i]);
+    }
+}
+console.log("resultTextLog", resultTextLog);
+for (let i = 0; i < resultTextLog.length; i++) {
+    $("#resultTextSpan").append(`<p>${resultTextLog[i]}</p>`);
+}
+// ゲーム終了処理
+function gameFinish() {
+    const resultText = `${scoreL} 対 ${scoreR}`
+    playSE(resultSE);
+    $("#messageText").html(`<p>試合終了！</p><p>${resultText}</p>`);
+    $("#messageText").addClass("bigFont");
+    $("#messageWindow").css("display", "flex");
+    resultTextLog.unshift(resultText);
+    console.log("resultTextLog", resultTextLog);
+    if (resultTextLog.length > 5) {
+        resultTextLog.pop();
+    }
+    const json = JSON.stringify(resultTextLog);
+    localStorage.setItem('resultText', json);
+}
+// セーブロード処理
 $('.saveSlot').on('click', function () {
+    // セーブスロット実装
     const num = $('.saveSlot').index(this);
     const pos = [];
     $piece.each(function () {
+        // お邪魔ブロックの座標を保存
         pos.push($(this).offset());
     })
     const json = JSON.stringify(pos);
@@ -266,3 +319,9 @@ $(".loadSlot").on('click', function () {
         })
     }
 });
+// 連続再生対応関数
+function playSE(audioItem) {
+    audioItem.pause();
+    audioItem.currentTime = 0;
+    audioItem.play();
+}
